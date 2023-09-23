@@ -179,7 +179,32 @@ ORDER BY
     r.firstname
 
 /* Q12: Find the facilities with their usage by member, but not guests */
-
+SELECT 
+    name,
+    CONCAT(surname, ' ', firstname) AS member_name,
+    COUNT(surname) AS 'usage'
+FROM
+    Bookings
+LEFT JOIN Facilities USING(facid)
+LEFT JOIN Members USING(memid)
+WHERE
+    memid != 0
+GROUP BY NAME
+    ,
+    member_name;
 
 /* Q13: Find the facilities usage by month, but not guests */
-
+SELECT 
+    name,
+    EXTRACT(month
+	FROM
+    starttime) AS month_used,
+    COUNT(NAME) AS 'usage'
+FROM
+    Bookings
+LEFT JOIN Facilities USING(facid)
+WHERE
+    memid != 0
+GROUP BY 
+    name,
+    month_used;
