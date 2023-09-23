@@ -155,9 +155,28 @@ QUESTIONS:
 /* Q10: Produce a list of facilities with a total revenue less than 1000.
 The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
+SELECT 
+	name, 
+	SUM(CASE WHEN memid = 0 THEN slots * guestcost
+        ELSE slots * membercost END) AS total_revenue
+FROM Bookings
+LEFT JOIN Facilities USING(facid)
+GROUP BY name
+HAVING total_revenue < 1000
+ORDER BY total_revenue
 
 /* Q11: Produce a report of members and who recommended them in alphabetic surname,firstname order */
-
+SELECT
+    CONCAT(m.surname, ' ', m.firstname) AS member,
+    CONCAT(r.surname, ' ', r.firstname) AS recommended_by
+FROM
+    Members AS m,
+    Members AS r
+WHERE
+    m.recommendedby > 0 AND m.recommendedby = r.memid
+ORDER BY
+    r.surname,
+    r.firstname
 
 /* Q12: Find the facilities with their usage by member, but not guests */
 
